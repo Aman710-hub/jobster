@@ -13,12 +13,19 @@ const Register = () => {
   // redux toolkit and useNavigate later
 
   const handleChange = (e) => {
-    console.log(e.target);
+    const name = e.target.name;
+    const valueOfInput = e.target.value;
+    console.log(name, value);
+    setValue({ ...value, [name]: valueOfInput });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target);
+    const { name, email, password, isMember } = value;
+    if (!email || !password || (!isMember && !name)) {
+      console.log("please fill feald");
+      return;
+    }
   };
 
   const toggleMember = () => {
