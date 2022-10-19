@@ -1,6 +1,7 @@
 import { Logo, FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, registerUser } from "../features/user/userSlice";
@@ -18,6 +19,17 @@ const Register = () => {
   // redux toolkit and useNavigate later
   const dispatch = useDispatch();
   const { isLoading, user } = useSelector((store) => store.user);
+
+  // auto navigate to the home page
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const name = e.target.name;
