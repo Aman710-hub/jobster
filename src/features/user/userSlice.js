@@ -1,35 +1,75 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-
 import customFetch from "../../utils/axios";
+import {
+  getUserFromLocalStorage,
+  setUserToLocalStorage,
+} from "../../utils/LocalStorage";
 
 const initialState = {
   isLoading: false,
-  user: null,
+  user: getUserFromLocalStorage(),
 };
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user, thunkAPI) => {
     try {
-      const resp = await customFetch.post("/auth/testingRegister", user);
-      console.log(resp);
+      const resp = await customFetch.post("auth/register", user);
+      return resp.data;
     } catch (error) {
-      console.log(error.response);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
     }
   }
 );
 
-export const loginUseer = createAsyncThunk(
+export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user, thunkAPI) => {
-    console.log("Login user:", user);
+    try {
+      const resp = await customFetch.post("/auth/login", user);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
   }
 );
 
 const userSlice = createSlice({
   name: "user",
   initialState,
+  extraReducers: {
+    [registerUser.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [registerUser.fulfilled]: (state, { payload }) => {
+      const user = payload.user;
+      state.isLoading = false;
+      state.user = user;
+      setUserToLocalStorage(user);
+      toast.success(`Hello There ${user.name}`);
+    },
+    [registerUser.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.error(payload);
+    },
+
+    // login
+    [loginUser.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [loginUser.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      const user = payload.user;
+      state.user = user;
+      setUserToLocalStorage(user);
+      toast.success(`Wellcom Back ${user.name}`);
+    },
+    [loginUser.rejected]: (state, { payload }) => {
+      state.isLoading = true;
+      toast.error(payload);
+    },
+  },
 });
 
 export default userSlice.reducer;

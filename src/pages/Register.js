@@ -3,7 +3,7 @@ import Wrapper from "../assets/wrappers/RegisterPage";
 import { useState, useEffect } from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { loginUseer, registerUser } from "../features/user/userSlice";
+import { loginUser, registerUser } from "../features/user/userSlice";
 // Tost
 import { toast } from "react-toastify";
 
@@ -17,7 +17,7 @@ const Register = () => {
   const [value, setValue] = useState(initialState);
   // redux toolkit and useNavigate later
   const dispatch = useDispatch();
-  const { isMember, user } = useSelector((store) => store.user);
+  const { isLoading, user } = useSelector((store) => store.user);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -32,10 +32,15 @@ const Register = () => {
       toast.error("Please Fill Out all The Feilds");
       return;
     }
+
     if (isMember) {
-      dispatch(loginUseer({ email: email, password: password }));
+      dispatch(loginUser({ email: email, password: password }));
+      return;
     }
-    dispatch(registerUser({ name, email, password }));
+    if (!isMember) {
+      dispatch(registerUser({ name: name, email: email, password: password }));
+      return;
+    }
   };
 
   const toggleMember = () => {
@@ -70,7 +75,7 @@ const Register = () => {
           value={value.password}
           handleChange={handleChange}
         />
-        <button className="btn btn-block" type="submit">
+        <button className="btn btn-block" type="submit" disabled={isLoading}>
           submit
         </button>
 
