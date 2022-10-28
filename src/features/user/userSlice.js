@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
 import customFetch from "../../utils/axios";
+import { toast } from "react-toastify";
+// local storage
 import {
   getUserFromLocalStorage,
   setUserToLocalStorage,
@@ -15,7 +16,8 @@ export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user, thunkAPI) => {
     try {
-      const resp = await customFetch.post("auth/register", user);
+      const resp = await customFetch.post("/auth/register", user);
+      console.log(resp.data);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -35,17 +37,17 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "user",
   initialState,
+  // reducers: {},
   extraReducers: {
     [registerUser.pending]: (state) => {
       state.isLoading = true;
     },
     [registerUser.fulfilled]: (state, { payload }) => {
-      const user = payload.user;
       state.isLoading = false;
-      state.user = user;
+      const { user } = payload;
       setUserToLocalStorage(user);
       toast.success(`Hello There ${user.name}`);
     },
@@ -53,14 +55,13 @@ const userSlice = createSlice({
       state.isLoading = false;
       toast.error(payload);
     },
-
     // login
     [loginUser.pending]: (state) => {
       state.isLoading = true;
     },
     [loginUser.fulfilled]: (state, { payload }) => {
+      const { user } = payload;
       state.isLoading = false;
-      const user = payload.user;
       state.user = user;
       setUserToLocalStorage(user);
       toast.success(`Wellcom Back ${user.name}`);
