@@ -20,13 +20,16 @@ const Register = () => {
   const [values, setValues] = useState(initialState);
   const dispatch = useDispatch();
   const { isLoading, user } = useSelector((store) => store.user);
+  console.log("🚀 ~ Register ~ user", user);
 
   // auto navigate
   const navigate = useNavigate();
   useEffect(() => {
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+    if (user) {
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
   }, [user, navigate]);
 
   const handleChange = (e) => {
