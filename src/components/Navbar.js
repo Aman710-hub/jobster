@@ -1,6 +1,5 @@
 import React from "react";
 import Wrapper from "../assets/wrappers/Navbar";
-import { FaHome } from "react-icons/fa";
 import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
 import Logo from "./Logo";
 import { useState } from "react";
@@ -40,9 +39,7 @@ const Navbar = () => {
             <button
               type="button"
               className="dropdown-btn"
-              onClick={() => {
-                dispatch(loguotUser());
-              }}
+              onClick={() => dispatch(loguotUser())}
             >
               logout
             </button>

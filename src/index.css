@@ -324,3 +324,7 @@ ul {
 .Toastify__toast {
   text-transform: capitalize;
 }
+
+.nav-links a.active {
+  color: red;
+}
