@@ -1627,6 +1627,7 @@ const AddJob = () => {
     isEditing,
     editJobId,
   } = useSelector((store) => store.job);
+  
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
