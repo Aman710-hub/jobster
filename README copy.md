@@ -1627,7 +1627,7 @@ const AddJob = () => {
     isEditing,
     editJobId,
   } = useSelector((store) => store.job);
-  
+
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -2020,7 +2020,7 @@ export const store = configureStore({
 });
 ```
 
-#### 59) AllJobs Page Structure
+#### 59) AllJobs Page Structure ,,,,,,,,,,,,,,,,,,,,,,
 
 - create
 - components/SearchContainer.js
